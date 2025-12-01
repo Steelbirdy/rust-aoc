@@ -1,0 +1,9 @@
+input
+.idea
+__pycache__
+Pipfile.lock
+.env
+
+# Added by cargo
+
+/target

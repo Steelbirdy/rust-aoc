@@ -1,0 +1,21 @@
+use crate::{samples, Sample};
+
+type Input = String;
+
+const PART1_CHECKS: &[Sample] = samples![];
+
+const PART2_CHECKS: &[Sample] = samples![];
+
+pub fn generator(input: &str) -> Input {
+    input.to_string()
+}
+
+pub fn part1(input: &Input) -> u64 {
+    0
+}
+
+pub fn part2(input: &Input) -> u64 {
+    0
+}
+
+crate::solution!(Input, {day}, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
