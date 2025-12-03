@@ -124,4 +124,4 @@ pub fn part2(input: &Input) -> u64 {
     panic!("not found")
 }
 
-crate::solution!(Input, 4, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(Input, 2016, 4, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);

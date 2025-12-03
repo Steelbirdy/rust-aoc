@@ -54,4 +54,4 @@ pub fn part2(input: &Input) -> u64 {
         .sum()
 }
 
-crate::solution!(Input, 2, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(Input, 2025, 2, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);

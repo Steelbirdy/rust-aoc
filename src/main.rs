@@ -27,24 +27,25 @@ fn main() -> Result<()> {
     dotenv().ok();
     let cli = Cli::parse();
     let year = env::var("AOC_YEAR").context("AOC_YEAR not set in .env")?;
+    let year = year.parse::<u32>()?;
 
     match cli.command {
         Commands::Init { day } => {
             let day = get_day(day)?;
-            init_day(&year, day)?;
+            init_day(year, day)?;
         }
         Commands::Run { day } => {
             let day = get_day(day)?;
-            run_day(&year, day)?;
+            run_day(year, day)?;
         }
     }
     Ok(())
 }
 
-fn init_day(year: &str, day: u32) -> Result<()> {
+fn init_day(year: u32, day: u32) -> Result<()> {
     let cwd = env::current_dir()?;
     let folder_format = env::var("AOC_FOLDER_FORMAT").unwrap_or_else(|_| "aoc{year}".to_string());
-    let folder_name = folder_format.replace("{year}", year);
+    let folder_name = folder_format.replace("{year}", &year.to_string());
     let year_folder = cwd.join("src").join(&folder_name);
 
     // 1. Ensure year module exists
@@ -69,7 +70,7 @@ fn init_day(year: &str, day: u32) -> Result<()> {
     if !file_path.exists() {
         let template_path = cwd.join("templates").join("template.rs.example");
         let template = fs::read_to_string(template_path).context("Template file not found")?;
-        let filled = template.replace("{day}", &day.to_string());
+        let filled = template.replace("{day}", &day.to_string()).replace("{year}", &year.to_string());
         fs::write(&file_path, filled)?;
         println!("Created {}", file_path.display());
 
@@ -91,10 +92,10 @@ fn init_day(year: &str, day: u32) -> Result<()> {
     Ok(())
 }
 
-fn run_day(year: &str, day: u32) -> Result<()> {
+fn run_day(year: u32, day: u32) -> Result<()> {
     let input = get_input(year, day)?;
 
-    let solution = inventory::iter::<Solution>().find(|s| s.day == day);
+    let solution = inventory::iter::<Solution>().find(|s| s.year == year && s.day == day);
     if let Some(solution) = solution {
         let (input, generator_timings) = timings(solution.generator, &input);
         println!("Running Day {}", day);
@@ -167,16 +168,16 @@ pub fn get_day(day: Option<u32>) -> Result<u32> {
     Ok(d)
 }
 
-pub fn get_input_path(year: &str, day: u32) -> PathBuf {
+pub fn get_input_path(year: u32, day: u32) -> PathBuf {
     let cwd = env::current_dir().unwrap();
     let folder_format = env::var("AOC_FOLDER_FORMAT").unwrap_or_else(|_| "aoc{year}".to_string());
-    let folder_name = folder_format.replace("{year}", year);
+    let folder_name = folder_format.replace("{year}", &year.to_string());
     cwd.join("input")
         .join(folder_name)
         .join(format!("day{}.txt", day))
 }
 
-pub fn retrieve_input(year: &str, day: u32, path: &Path) -> Result<()> {
+pub fn retrieve_input(year: u32, day: u32, path: &Path) -> Result<()> {
     if path.exists() {
         return Ok(());
     }
@@ -207,7 +208,7 @@ pub fn retrieve_input(year: &str, day: u32, path: &Path) -> Result<()> {
     Ok(())
 }
 
-pub fn get_input(year: &str, day: u32) -> Result<String> {
+pub fn get_input(year: u32, day: u32) -> Result<String> {
     let path = get_input_path(year, day);
     retrieve_input(year, day, &path)?;
     let content = fs::read_to_string(path)?;

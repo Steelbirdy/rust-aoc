@@ -67,4 +67,4 @@ pub fn part2(input: &Input) -> u64 {
     panic!("no location visited twice")
 }
 
-crate::solution!(Input, 1, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(Input, 2016, 1, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);

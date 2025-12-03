@@ -8,6 +8,7 @@ use macros::{samples, solution};
 use std::any::Any;
 
 pub struct Solution {
+    pub year: u32,
     pub day: u32,
     pub generator: fn(&str) -> Box<dyn Any>,
     pub part1: fn(&dyn Any) -> String,

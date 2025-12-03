@@ -79,6 +79,7 @@ pub fn part2(input: &Input) -> u64 {
 
 crate::solution!(
     Input,
+    2015,
     13,
     generator,
     part1,

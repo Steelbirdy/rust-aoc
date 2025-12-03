@@ -59,4 +59,4 @@ pub fn part2(input: &Input) -> u64 {
         .count() as u64
 }
 
-crate::solution!(Input, 7, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(Input, 2016, 7, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);

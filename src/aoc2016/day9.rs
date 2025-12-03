@@ -73,4 +73,4 @@ pub fn part2(input: &Input) -> u64 {
     process(input) as u64
 }
 
-crate::solution!(Input, 9, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(Input, 2016, 9, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);

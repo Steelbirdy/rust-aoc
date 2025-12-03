@@ -75,6 +75,7 @@ pub fn part2(input: &Input) -> String {
 
 crate::solution!(
     Input,
+    2015,
     11,
     generator,
     part1,

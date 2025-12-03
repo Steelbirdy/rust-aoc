@@ -88,4 +88,4 @@ pub fn part2(input: &Input) -> u64 {
     password as u64
 }
 
-crate::solution!(Input, 1, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(Input, 2025, 1, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);

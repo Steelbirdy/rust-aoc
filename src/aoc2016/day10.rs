@@ -159,4 +159,4 @@ pub fn part2(input: &Input) -> u64 {
     (outputs[&0] * outputs[&1] * outputs[&2]) as u64
 }
 
-crate::solution!(Input, 10, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(Input, 2016, 10, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);

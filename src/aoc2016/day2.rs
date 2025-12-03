@@ -72,4 +72,4 @@ pub fn part2(input: &Input) -> String {
     buttons
 }
 
-crate::solution!(Input, 2, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(Input, 2016, 2, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);

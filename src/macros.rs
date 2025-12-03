@@ -5,7 +5,7 @@ macro_rules! samples {
 }
 
 macro_rules! solution {
-    ($T:ident, $day:literal, $generator:ident, $part1:ident, $part1_checks:ident, $part2:ident, $part2_checks:ident) => {
+    ($T:ident, $year:literal, $day:literal, $generator:ident, $part1:ident, $part1_checks:ident, $part2:ident, $part2_checks:ident) => {
         mod __solution {
             use std::any::Any;
 
@@ -45,6 +45,7 @@ macro_rules! solution {
         }
 
         inventory::submit!($crate::Solution {
+            year: $year,
             day: $day,
             generator: __solution::generator,
             part1: __solution::part1,
