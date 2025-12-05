@@ -1,5 +1,5 @@
+use crate::{Sample, samples, utils::Direction};
 use std::collections::HashMap;
-use crate::{samples, Sample, utils::Direction};
 
 type Input = Vec<Vec<Direction>>;
 
@@ -10,7 +10,8 @@ const PART1_CHECKS: &[Sample] = samples![
 const PART2_CHECKS: &[Sample] = samples![];
 
 pub fn generator(input: &str) -> Input {
-    input.lines()
+    input
+        .lines()
         .map(|line| {
             line.chars()
                 .map(|d| Direction::from_char(d).unwrap())
@@ -72,4 +73,13 @@ pub fn part2(input: &Input) -> String {
     buttons
 }
 
-crate::solution!(Input, 2016, 2, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(
+    Input,
+    2016,
+    2,
+    generator,
+    part1,
+    PART1_CHECKS,
+    part2,
+    PART2_CHECKS
+);

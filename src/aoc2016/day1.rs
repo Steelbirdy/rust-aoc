@@ -1,5 +1,5 @@
+use crate::{Sample, samples, utils::Direction};
 use std::collections::HashSet;
-use crate::{samples, Sample, utils::Direction};
 
 type Input = Vec<(Direction, u32)>;
 
@@ -14,7 +14,8 @@ const PART2_CHECKS: &[Sample] = samples![
 ];
 
 pub fn generator(input: &str) -> Input {
-    input.split(", ")
+    input
+        .split(", ")
         .map(|s| {
             let mut ch = s.chars();
             (
@@ -33,7 +34,7 @@ pub fn part1(input: &Input) -> u64 {
     for &(d, steps) in input {
         direction.rotate(d);
         let (dx, dy) = direction.deltas();
-        
+
         x += (steps as i32) * dx;
         y += (steps as i32) * dy;
     }
@@ -56,7 +57,7 @@ pub fn part2(input: &Input) -> u64 {
             let sx = x + step * dx;
             let sy = y + step * dy;
             if !visited.insert((sx, sy)) {
-                return (sx.abs() + sy.abs()) as u64
+                return (sx.abs() + sy.abs()) as u64;
             }
         }
 
@@ -67,4 +68,13 @@ pub fn part2(input: &Input) -> u64 {
     panic!("no location visited twice")
 }
 
-crate::solution!(Input, 2016, 1, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(
+    Input,
+    2016,
+    1,
+    generator,
+    part1,
+    PART1_CHECKS,
+    part2,
+    PART2_CHECKS
+);

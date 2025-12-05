@@ -70,7 +70,9 @@ fn init_day(year: u32, day: u32) -> Result<()> {
     if !file_path.exists() {
         let template_path = cwd.join("templates").join("template.rs.example");
         let template = fs::read_to_string(template_path).context("Template file not found")?;
-        let filled = template.replace("{day}", &day.to_string()).replace("{year}", &year.to_string());
+        let filled = template
+            .replace("{day}", &day.to_string())
+            .replace("{year}", &year.to_string());
         fs::write(&file_path, filled)?;
         println!("Created {}", file_path.display());
 

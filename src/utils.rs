@@ -1,6 +1,109 @@
 use itertools::Itertools;
-use std::cmp::{Ordering, Reverse};
-use std::collections::BinaryHeap;
+use std::{
+    cmp::{Ordering, Reverse},
+    collections::BinaryHeap,
+};
+
+pub fn neighbors(
+    (x, y): (usize, usize),
+    (width, height): (usize, usize),
+) -> impl Iterator<Item = (usize, usize)> {
+    const ALL: [(isize, isize); 8] = [
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
+        (0, -1),
+        (0, 1),
+        (1, -1),
+        (1, 0),
+        (1, 1),
+    ];
+
+    ALL.into_iter().filter_map(move |(dx, dy)| {
+        let x2 = x.checked_add_signed(dx);
+        let y2 = y.checked_add_signed(dy);
+        x2.zip(y2).filter(|&(x2, y2)| x2 < width && y2 < height)
+    })
+}
+
+pub trait Merge<T>: Sized {
+    fn start(&self) -> &T;
+
+    fn merge(self, other: Self) -> Result<Self, (Self, Self)>;
+}
+
+impl<T: Ord> Merge<T> for std::ops::Range<T> {
+    fn start(&self) -> &T {
+        &self.start
+    }
+
+    fn merge(self, other: Self) -> Result<Self, (Self, Self)> {
+        let (r1, r2) = if self.start <= other.start {
+            (self, other)
+        } else {
+            (other, self)
+        };
+
+        if r1.end < r2.start {
+            Err((r1, r2))
+        } else if r1.end <= r2.end {
+            Ok(r1.start..r2.end)
+        } else {
+            Ok(r1)
+        }
+    }
+}
+
+impl<T: Ord> Merge<T> for std::ops::RangeInclusive<T> {
+    fn start(&self) -> &T {
+        self.start()
+    }
+
+    fn merge(self, other: Self) -> Result<Self, (Self, Self)> {
+        let (r1, r2) = if self.start() <= other.start() {
+            (self, other)
+        } else {
+            (other, self)
+        };
+
+        if r1.end() < r2.start() {
+            Err((r1, r2))
+        } else if r1.end() <= r2.end() {
+            let start = r1.into_inner().0;
+            let end = r2.into_inner().1;
+            Ok(start..=end)
+        } else {
+            Ok(r1)
+        }
+    }
+}
+
+pub fn merge_ranges<T: Ord, R: Merge<T>>(iter: impl IntoIterator<Item = R>) -> Vec<R> {
+    let mut ranges: Vec<_> = iter.into_iter().collect();
+
+    if ranges.is_empty() {
+        return ranges;
+    }
+
+    ranges.sort_by(|r1, r2| r1.start().cmp(r2.start()));
+    let (mut ranges, last) =
+        ranges
+            .into_iter()
+            .fold((Vec::new(), None), |(mut ranges, prev), range| {
+                let Some(prev) = prev else {
+                    return (ranges, Some(range));
+                };
+                match prev.merge(range) {
+                    Ok(r) => (ranges, Some(r)),
+                    Err((r1, r2)) => {
+                        ranges.push(r1);
+                        (ranges, Some(r2))
+                    }
+                }
+            });
+    ranges.extend(last);
+    ranges
+}
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub enum Direction {
@@ -20,7 +123,7 @@ impl Direction {
             _ => None,
         }
     }
-    
+
     pub fn deltas(self) -> (i32, i32) {
         match self {
             Self::Up => (0, -1),
@@ -29,7 +132,7 @@ impl Direction {
             Self::Down => (0, 1),
         }
     }
-    
+
     // For this function, Up is considered no rotation, Down is reverse, and Left and Right are left and right 90 degrees respectively.
     pub fn rotated(self, d: Self) -> Self {
         match d {
@@ -39,7 +142,7 @@ impl Direction {
             Self::Down => self.reversed(),
         }
     }
-    
+
     pub fn rotated_right(self) -> Self {
         match self {
             Self::Up => Self::Right,
@@ -48,7 +151,7 @@ impl Direction {
             Self::Down => Self::Left,
         }
     }
-    
+
     pub fn rotated_left(self) -> Self {
         match self {
             Self::Up => Self::Left,
@@ -57,7 +160,7 @@ impl Direction {
             Self::Down => Self::Right,
         }
     }
-    
+
     pub fn reversed(self) -> Self {
         match self {
             Self::Up => Self::Down,
@@ -66,19 +169,19 @@ impl Direction {
             Self::Down => Self::Up,
         }
     }
-    
+
     pub fn rotate(&mut self, d: Self) {
         *self = self.rotated(d);
     }
-    
+
     pub fn rotate_left(&mut self) {
         *self = self.rotated_left();
     }
-    
+
     pub fn rotate_right(&mut self) {
         *self = self.rotated_right();
     }
-    
+
     pub fn reverse(&mut self) {
         *self = self.reversed();
     }
@@ -277,4 +380,11 @@ fn test_dijkstra() {
     let result = result.unwrap();
     assert_eq!(result.0, vec!["A", "E", "D"]);
     assert_eq!(result.1, 8);
+}
+
+#[test]
+fn test_range_inclusive_merge_ranges() {
+    let ranges = vec![3..=5, 10..=14, 16..=20, 12..=18];
+
+    assert_eq!(merge_ranges(ranges), vec![3..=5, 10..=20]);
 }

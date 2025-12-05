@@ -1,5 +1,5 @@
-use crate::{samples, Sample};
 use crate::utils::Direction;
+use crate::{Sample, samples};
 
 type Input = Vec<(Direction, i32)>;
 
@@ -31,7 +31,8 @@ const PART2_CHECKS: &[Sample] = samples![
 ];
 
 pub fn generator(input: &str) -> Input {
-    input.lines()
+    input
+        .lines()
         .map(|line| {
             let mut chars = line.trim().chars();
             let (first, rest) = (chars.next().unwrap(), chars.as_str());
@@ -88,4 +89,13 @@ pub fn part2(input: &Input) -> u64 {
     password as u64
 }
 
-crate::solution!(Input, 2025, 1, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(
+    Input,
+    2025,
+    1,
+    generator,
+    part1,
+    PART1_CHECKS,
+    part2,
+    PART2_CHECKS
+);

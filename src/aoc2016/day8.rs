@@ -1,4 +1,4 @@
-use crate::{samples, Sample};
+use crate::{Sample, samples};
 
 type Input = Vec<Instruction>;
 
@@ -17,7 +17,8 @@ pub enum Instruction {
 }
 
 pub fn generator(input: &str) -> Input {
-    input.lines()
+    input
+        .lines()
         .map(|line| prse::parse!(line.trim(), "{}"))
         .collect()
 }
@@ -37,9 +38,7 @@ pub fn part1(input: &Input) -> u64 {
                 }
             }
             Instruction::RotateColumn(x, offset) => {
-                let column: Vec<_> = screen.iter()
-                    .map(|row| row[x as usize])
-                    .collect();
+                let column: Vec<_> = screen.iter().map(|row| row[x as usize]).collect();
                 for y in 0..HEIGHT {
                     let y_offset = (y + offset as usize) % HEIGHT;
                     screen[y_offset][x as usize] = column[y];
@@ -55,10 +54,7 @@ pub fn part1(input: &Input) -> u64 {
         }
     }
 
-    screen.into_iter()
-        .flatten()
-        .filter(|px| *px)
-        .count() as u64
+    screen.into_iter().flatten().filter(|px| *px).count() as u64
 }
 
 pub fn part2(input: &Input) -> u64 {
@@ -76,9 +72,7 @@ pub fn part2(input: &Input) -> u64 {
                 }
             }
             Instruction::RotateColumn(x, offset) => {
-                let column: Vec<_> = screen.iter()
-                    .map(|row| row[x as usize])
-                    .collect();
+                let column: Vec<_> = screen.iter().map(|row| row[x as usize]).collect();
                 for y in 0..HEIGHT {
                     let y_offset = (y + offset as usize) % HEIGHT;
                     screen[y_offset][x as usize] = column[y];
@@ -94,15 +88,24 @@ pub fn part2(input: &Input) -> u64 {
         }
     }
 
-    screen.into_iter()
-        .for_each(|row| {
-            let st: String = row.into_iter()
-                .map(|px| if px { '#' } else { ' ' })
-                .collect();
-            println!("{}", st);
-        });
+    screen.into_iter().for_each(|row| {
+        let st: String = row
+            .into_iter()
+            .map(|px| if px { '#' } else { ' ' })
+            .collect();
+        println!("{}", st);
+    });
 
     0
 }
 
-crate::solution!(Input, 2016, 8, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(
+    Input,
+    2016,
+    8,
+    generator,
+    part1,
+    PART1_CHECKS,
+    part2,
+    PART2_CHECKS
+);

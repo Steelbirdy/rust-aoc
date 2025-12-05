@@ -1,4 +1,4 @@
-use crate::{samples, Sample};
+use crate::{Sample, samples};
 
 type Input = String;
 
@@ -22,7 +22,7 @@ pub fn part1(input: &Input) -> String {
             println!("Found {ch:x} @ i={i}");
         }
         if password.len() == 8 {
-            break
+            break;
         }
     }
     password
@@ -44,12 +44,19 @@ pub fn part2(input: &Input) -> String {
             println!("Found {ch:x} for index {index} @ i={i}");
         }
         if password.iter().all(|&ch| ch != u8::MAX) {
-            break
+            break;
         }
     }
-    password.into_iter()
-        .map(|b| format!("{b:x}"))
-        .collect()
+    password.into_iter().map(|b| format!("{b:x}")).collect()
 }
 
-crate::solution!(Input, 2016, 5, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(
+    Input,
+    2016,
+    5,
+    generator,
+    part1,
+    PART1_CHECKS,
+    part2,
+    PART2_CHECKS
+);

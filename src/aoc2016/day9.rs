@@ -1,6 +1,6 @@
-use crate::{samples, Sample};
-use std::sync::OnceLock;
+use crate::{Sample, samples};
 use regex::Regex;
+use std::sync::OnceLock;
 
 type Input = String;
 
@@ -25,11 +25,10 @@ pub fn part1(input: &Input) -> u64 {
 
         let mut result = 0;
         while !s.is_empty() {
-            let pattern = PATTERN.get_or_init(|| {
-                Regex::new(r"\((\d+)x(\d+)\)").unwrap()
-            });
-            let Some(captures) = pattern.captures(s)
-                else { return result + s.len() };
+            let pattern = PATTERN.get_or_init(|| Regex::new(r"\((\d+)x(\d+)\)").unwrap());
+            let Some(captures) = pattern.captures(s) else {
+                return result + s.len();
+            };
 
             let r#match = captures.get_match();
             result += r#match.start();
@@ -52,11 +51,10 @@ pub fn part2(input: &Input) -> u64 {
 
         let mut result = 0;
         while !s.is_empty() {
-            let pattern = PATTERN.get_or_init(|| {
-                Regex::new(r"\((\d+)x(\d+)\)").unwrap()
-            });
-            let Some(captures) = pattern.captures(s)
-            else { return result + s.len() };
+            let pattern = PATTERN.get_or_init(|| Regex::new(r"\((\d+)x(\d+)\)").unwrap());
+            let Some(captures) = pattern.captures(s) else {
+                return result + s.len();
+            };
 
             let r#match = captures.get_match();
             result += r#match.start();
@@ -73,4 +71,13 @@ pub fn part2(input: &Input) -> u64 {
     process(input) as u64
 }
 
-crate::solution!(Input, 2016, 9, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(
+    Input,
+    2016,
+    9,
+    generator,
+    part1,
+    PART1_CHECKS,
+    part2,
+    PART2_CHECKS
+);

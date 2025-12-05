@@ -1,6 +1,6 @@
-use crate::{samples, Sample};
-use std::ops::RangeInclusive;
+use crate::{Sample, samples};
 use rayon::prelude::*;
+use std::ops::RangeInclusive;
 
 type Input = Vec<RangeInclusive<u64>>;
 
@@ -13,7 +13,8 @@ const PART2_CHECKS: &[Sample] = samples![
 ];
 
 pub fn generator(input: &str) -> Input {
-    input.split(',')
+    input
+        .split(',')
         .map(|range| {
             let (low, high) = range.split_once('-').unwrap();
             low.parse().unwrap()..=high.parse().unwrap()
@@ -22,7 +23,8 @@ pub fn generator(input: &str) -> Input {
 }
 
 pub fn part1(input: &Input) -> u64 {
-    input.par_iter()
+    input
+        .par_iter()
         .cloned()
         .flatten()
         .filter(|&n| {
@@ -34,24 +36,32 @@ pub fn part1(input: &Input) -> u64 {
 }
 
 pub fn part2(input: &Input) -> u64 {
-    input.par_iter()
+    input
+        .par_iter()
         .cloned()
         .flatten()
         .filter(|&n| {
             let digits = n.ilog10() + 1;
-            (2..=digits)
-                .filter(|&c| digits.is_multiple_of(c))
-                .any(|c| {
-                    let ten_pow = 10_u64.pow(digits / c);
-                    let seq = n % ten_pow;
-                    let mut denominator = 1;
-                    (0..c - 1).all(|_| {
-                        denominator *= ten_pow;
-                        n / denominator % ten_pow == seq
-                    })
+            (2..=digits).filter(|&c| digits.is_multiple_of(c)).any(|c| {
+                let ten_pow = 10_u64.pow(digits / c);
+                let seq = n % ten_pow;
+                let mut denominator = 1;
+                (0..c - 1).all(|_| {
+                    denominator *= ten_pow;
+                    n / denominator % ten_pow == seq
                 })
+            })
         })
         .sum()
 }
 
-crate::solution!(Input, 2025, 2, generator, part1, PART1_CHECKS, part2, PART2_CHECKS);
+crate::solution!(
+    Input,
+    2025,
+    2,
+    generator,
+    part1,
+    PART1_CHECKS,
+    part2,
+    PART2_CHECKS
+);
