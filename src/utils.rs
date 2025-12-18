@@ -146,9 +146,9 @@ impl Direction {
     pub fn rotated_right(self) -> Self {
         match self {
             Self::Up => Self::Right,
-            Self::Left => Self::Up,
             Self::Right => Self::Down,
             Self::Down => Self::Left,
+            Self::Left => Self::Up,
         }
     }
 
@@ -156,17 +156,17 @@ impl Direction {
         match self {
             Self::Up => Self::Left,
             Self::Left => Self::Down,
-            Self::Right => Self::Up,
             Self::Down => Self::Right,
+            Self::Right => Self::Up,
         }
     }
 
     pub fn reversed(self) -> Self {
         match self {
             Self::Up => Self::Down,
+            Self::Down => Self::Up,
             Self::Left => Self::Right,
             Self::Right => Self::Left,
-            Self::Down => Self::Up,
         }
     }
 

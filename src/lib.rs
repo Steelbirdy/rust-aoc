@@ -4,7 +4,7 @@ pub mod aoc2025;
 pub mod macros;
 pub mod utils;
 
-use macros::{samples, solution};
+use macros::{regex, samples, solution};
 use std::any::Any;
 
 pub struct Solution {

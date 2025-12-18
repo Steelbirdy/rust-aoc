@@ -56,4 +56,10 @@ macro_rules! solution {
     };
 }
 
-pub(crate) use {samples, solution};
+macro_rules! regex {
+    ($NAME:ident = $pat:literal) => {
+        static $NAME: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| regex::Regex::new($pat).unwrap());
+    };
+}
+
+pub(crate) use {regex, samples, solution};
